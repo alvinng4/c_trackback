@@ -3,6 +3,8 @@
 #include "c_traceback.h"
 
 void nested_test_warning();
+void nested_test_warning2();
+void nested_test_message();
 
 int main(void)
 {
@@ -17,6 +19,9 @@ int main(void)
     // Test raise warning
     nested_test_warning();
 
+    // Test message
+    nested_test_message();
+
     return 0;
 
 error:
@@ -27,6 +32,19 @@ void nested_test_warning()
 {
     CTB_PRINT_WARNING(
         CTB_DEPRECATION_WARNING,
-        "This function is deprecated in version 0.0.1. Use hello_world() instead."
+        "This should be warning level 1 with deprecation warning"
     );
+    nested_test_warning2();
+}
+
+void nested_test_warning2()
+{
+    CTB_PRINT_WARNING(
+        CTB_MEMORY_ERROR, "This should be warning level 2 with memory error"
+    );
+}
+
+void nested_test_message()
+{
+    CTB_PRINT_MESSAGE("This should be a message level 1");
 }

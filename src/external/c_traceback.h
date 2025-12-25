@@ -17,13 +17,20 @@ typedef struct CTB_Context CTB_Context;
 #define MAX_TRACEBACK_FRAMES 64
 
 /**
- * \brief Wrapper for raise_warning function.
+ * \brief Wrapper for printing an inline warning.
  *
  * \param[in] error_code Error code associated with the warning.
  * \param[in] warning_msg Warning message.
  */
 #define CTB_PRINT_WARNING(error_code, warning_msg)                                     \
     ctb_print_warning(__FILE__, __LINE__, __func__, error_code, warning_msg)
+
+/**
+ * \brief Wrapper for printing an inline message.
+ *
+ * \param[in] msg Warning message.
+ */
+#define CTB_PRINT_MESSAGE(msg) ctb_print_message(__FILE__, __LINE__, __func__, msg)
 
 CTB_Context *ctb_make_context(void);
 void ctb_free_context(CTB_Context *restrict context);
@@ -43,6 +50,21 @@ void ctb_print_warning(
     const char *restrict warning_func,
     const int error_code,
     const char *restrict warning_msg
+);
+
+/**
+ * \brief Print message to stdout.
+ *
+ * \param[in] file File where the message is sent.
+ * \param[in] line Line number where the message is sent.
+ * \param[in] func Function where the message is sent.
+ * \param[in] msg Message.
+ */
+void ctb_print_message(
+    const char *restrict file,
+    const int line,
+    const char *restrict func,
+    const char *restrict msg
 );
 
 #endif
