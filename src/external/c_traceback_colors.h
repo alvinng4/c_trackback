@@ -1,3 +1,10 @@
+/**
+ * \file c_traceback_colors.h
+ * \brief ANSI color codes for C traceback and error messages.
+ *
+ * \author Ching-Yin NG
+ */
+
 #ifndef C_TRACEBACK_COLORS_H
 #define C_TRACEBACK_COLORS_H
 

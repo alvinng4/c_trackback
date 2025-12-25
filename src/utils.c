@@ -1,3 +1,10 @@
+/**
+ * \file utils.c
+ * \brief Utility functions for C traceback library.
+ *
+ * \author Ching-Yin NG
+ */
+
 #include <stdbool.h>
 #include <stdio.h>
 #include <stdlib.h>
