@@ -2,25 +2,34 @@
 
 #include "c_traceback.h"
 
-void nested_test_warning();
-void nested_test_warning2();
-void nested_test_message();
+void inline_error();
+void inline_error_level2();
+void inline_warning();
+void inline_warning_level2();
+void inline_message();
+void inline_message_level2();
 
 int main(void)
 {
-    // Test make context
+    // Make context
     CTB_Context *ctb_context = ctb_make_context();
     if (!ctb_context)
     {
-        printf("Error: unable to make ctb_context");
+        fprintf(stderr, "Error: unable to make ctb_context");
+        fflush(stderr);
         goto error;
     }
 
-    // Test raise warning
-    nested_test_warning();
+    // Inline functions
+    printf("=============== Inline examples ===============\n");
+    fflush(stdout);
 
-    // Test message
-    nested_test_message();
+    inline_error();
+    inline_warning();
+    inline_message();
+
+    printf("===============================================\n");
+    fflush(stdout);
 
     return 0;
 
@@ -28,23 +37,45 @@ error:
     return 1;
 }
 
-void nested_test_warning()
+void inline_error()
 {
-    CTB_PRINT_WARNING(
+    CTB_PRINT_INLINE_ERROR(
+        CTB_ARITHMETIC_ERROR,
+        "This should be inline error level 1 with arithmetic error"
+    );
+    inline_error_level2();
+}
+
+void inline_error_level2()
+{
+    CTB_PRINT_INLINE_ERROR(
+        CTB_BUFFER_ERROR, "This should be inline error level 2 with buffer error"
+    );
+}
+
+void inline_warning()
+{
+    CTB_PRINT_INLINE_WARNING(
         CTB_DEPRECATION_WARNING,
-        "This should be warning level 1 with deprecation warning"
+        "This should be inline warning level 1 with deprecation warning"
     );
-    nested_test_warning2();
+    inline_warning_level2();
 }
 
-void nested_test_warning2()
+void inline_warning_level2()
 {
-    CTB_PRINT_WARNING(
-        CTB_MEMORY_ERROR, "This should be warning level 2 with memory error"
+    CTB_PRINT_INLINE_WARNING(
+        CTB_MEMORY_ERROR, "This should be inline warning level 2 with memory error"
     );
 }
 
-void nested_test_message()
+void inline_message()
 {
-    CTB_PRINT_MESSAGE("This should be a message level 1");
+    CTB_PRINT_INLINE_MESSAGE("This should be inline message level 1");
+    inline_message_level2();
+}
+
+void inline_message_level2()
+{
+    CTB_PRINT_INLINE_MESSAGE("This should be inline message level 2");
 }
