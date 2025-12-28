@@ -17,45 +17,45 @@ typedef struct CTB_Context CTB_Context;
 #define MAX_TRACEBACK_FRAMES 64
 
 /**
- * \brief Wrapper for printing an inline error.
+ * \brief Wrapper for logging an error to stderr without stacktrace.
  *
  * \param[in] error_code Error code associated with the error.
  * \param[in] msg Error message.
  */
-#define CTB_PRINT_INLINE_ERROR(error_code, msg)                                        \
+#define CTB_LOG_ERROR_INLINE(error_code, msg)                                          \
     do                                                                                 \
     {                                                                                  \
-        ctb_print_inline_error(__FILE__, __LINE__, __func__, error_code, msg);         \
+        ctb_log_error_inline(__FILE__, __LINE__, __func__, error_code, msg);           \
     } while (0)
 
 /**
- * \brief Wrapper for printing an inline warning.
+ * \brief Wrapper for logging a warning to stderr without stacktrace.
  *
  * \param[in] error_code Error code associated with the warning.
  * \param[in] msg Warning message.
  */
-#define CTB_PRINT_INLINE_WARNING(error_code, msg)                                      \
+#define CTB_LOG_WARNING_INLINE(error_code, msg)                                        \
     do                                                                                 \
     {                                                                                  \
-        ctb_print_inline_warning(__FILE__, __LINE__, __func__, error_code, msg);       \
+        ctb_log_warning_inline(__FILE__, __LINE__, __func__, error_code, msg);         \
     } while (0)
 
 /**
- * \brief Wrapper for printing an inline message.
+ * \brief Wrapper for logging a message to stdout without stacktrace.
  *
  * \param[in] msg Warning message.
  */
-#define CTB_PRINT_INLINE_MESSAGE(msg)                                                  \
+#define CTB_LOG_MESSAGE_INLINE(msg)                                                    \
     do                                                                                 \
     {                                                                                  \
-        ctb_print_inline_message(__FILE__, __LINE__, __func__, msg);                   \
+        ctb_log_message_inline(__FILE__, __LINE__, __func__, msg);                     \
     } while (0)
 
 CTB_Context *ctb_make_context(void);
 void ctb_free_context(CTB_Context *restrict context);
 
 /**
- * \brief Print inline error message to stderr.
+ * \brief Log error message to stderr without stacktrace.
  *
  * \param[in] file File where the error occurs.
  * \param[in] line Line number where the error occurs.
@@ -63,7 +63,7 @@ void ctb_free_context(CTB_Context *restrict context);
  * \param[in] error_code Error code associated with the error.
  * \param[in] msg Error message.
  */
-void ctb_print_inline_error(
+void ctb_log_error_inline(
     const char *restrict file,
     const int line,
     const char *restrict func,
@@ -72,7 +72,7 @@ void ctb_print_inline_error(
 );
 
 /**
- * \brief Print inline warning message to stderr.
+ * \brief Log warning message to stderr without stacktrace.
  *
  * \param[in] file File where the warning occurs.
  * \param[in] line Line number where the warning occurs.
@@ -80,7 +80,7 @@ void ctb_print_inline_error(
  * \param[in] error_code Error code associated with the warning.
  * \param[in] msg Warning message.
  */
-void ctb_print_inline_warning(
+void ctb_log_warning_inline(
     const char *restrict file,
     const int line,
     const char *restrict func,
@@ -89,14 +89,14 @@ void ctb_print_inline_warning(
 );
 
 /**
- * \brief Print message to stdout.
+ * \brief Log message to stdout without stacktrace.
  *
  * \param[in] file File where the message is sent.
  * \param[in] line Line number where the message is sent.
  * \param[in] func Function where the message is sent.
  * \param[in] msg Message.
  */
-void ctb_print_inline_message(
+void ctb_log_message_inline(
     const char *restrict file,
     const int line,
     const char *restrict func,

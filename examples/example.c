@@ -39,7 +39,7 @@ error:
 
 void inline_error()
 {
-    CTB_PRINT_INLINE_ERROR(
+    CTB_LOG_ERROR_INLINE(
         CTB_ARITHMETIC_ERROR,
         "This should be inline error level 1 with arithmetic error"
     );
@@ -48,14 +48,14 @@ void inline_error()
 
 void inline_error_level2()
 {
-    CTB_PRINT_INLINE_ERROR(
+    CTB_LOG_ERROR_INLINE(
         CTB_BUFFER_ERROR, "This should be inline error level 2 with buffer error"
     );
 }
 
 void inline_warning()
 {
-    CTB_PRINT_INLINE_WARNING(
+    CTB_LOG_WARNING_INLINE(
         CTB_DEPRECATION_WARNING,
         "This should be inline warning level 1 with deprecation warning"
     );
@@ -64,18 +64,18 @@ void inline_warning()
 
 void inline_warning_level2()
 {
-    CTB_PRINT_INLINE_WARNING(
+    CTB_LOG_WARNING_INLINE(
         CTB_MEMORY_ERROR, "This should be inline warning level 2 with memory error"
     );
 }
 
 void inline_message()
 {
-    CTB_PRINT_INLINE_MESSAGE("This should be inline message level 1");
+    CTB_LOG_MESSAGE_INLINE("This should be inline message level 1");
     inline_message_level2();
 }
 
 void inline_message_level2()
 {
-    CTB_PRINT_INLINE_MESSAGE("This should be inline message level 2");
+    CTB_LOG_MESSAGE_INLINE("This should be inline message level 2");
 }

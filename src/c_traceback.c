@@ -31,9 +31,10 @@ void ctb_free_context(CTB_Context *restrict context)
     }
 }
 
-static void ctb_print_inline(
+static void ctb_log_inline(
     FILE *stream,
     const char *header_color,
+    const char *message_color,
     const char *restrict file,
     const int line,
     const char *restrict func,
@@ -53,7 +54,7 @@ static void ctb_print_inline(
             CTB_TRACEBACK_FILE_COLOR, file, CTB_RESET_COLOR,
             CTB_TRACEBACK_LINE_COLOR, line, CTB_RESET_COLOR,
             CTB_TRACEBACK_FUNC_COLOR, func, CTB_RESET_COLOR,
-            CTB_MESSAGE_COLOR, msg, CTB_RESET_COLOR
+            message_color, msg, CTB_RESET_COLOR
         );
         fflush(stream);
         // clang-format on
@@ -73,7 +74,7 @@ static void ctb_print_inline(
     }
 }
 
-void ctb_print_inline_error(
+void ctb_log_error_inline(
     const char *restrict file,
     const int line,
     const char *restrict func,
@@ -82,9 +83,10 @@ void ctb_print_inline_error(
 )
 {
     FILE *stream = stderr;
-    ctb_print_inline(
+    ctb_log_inline(
         stream,
         CTB_ERROR_BOLD_COLOR,
+        CTB_ERROR_COLOR,
         file,
         line,
         func,
@@ -93,7 +95,7 @@ void ctb_print_inline_error(
     );
 }
 
-void ctb_print_inline_warning(
+void ctb_log_warning_inline(
     const char *restrict file,
     const int line,
     const char *restrict func,
@@ -102,9 +104,10 @@ void ctb_print_inline_warning(
 )
 {
     FILE *stream = stderr;
-    ctb_print_inline(
+    ctb_log_inline(
         stream,
         CTB_WARNING_BOLD_COLOR,
+        CTB_WARNING_COLOR,
         file,
         line,
         func,
@@ -113,7 +116,7 @@ void ctb_print_inline_warning(
     );
 }
 
-void ctb_print_inline_message(
+void ctb_log_message_inline(
     const char *restrict file,
     const int line,
     const char *restrict func,
@@ -121,5 +124,14 @@ void ctb_print_inline_message(
 )
 {
     FILE *stream = stdout;
-    ctb_print_inline(stream, CTB_MESSAGE_BOLD_COLOR, file, line, func, "Message", msg);
+    ctb_log_inline(
+        stream,
+        CTB_MESSAGE_BOLD_COLOR,
+        CTB_MESSAGE_COLOR,
+        file,
+        line,
+        func,
+        "Message",
+        msg
+    );
 }
