@@ -23,7 +23,7 @@
 #define CTB_TRACEBACK_FUNC_COLOR "\033[0;36m"    // Cyan
 
 // Messages
-#define CTB_MESSAGE_BOLD_COLOR "\033[1;95m"    // Bright Purple, Bold
+#define CTB_MESSAGE_BOLD_COLOR "\033[1;95m"      // Bright Purple, Bold
 #define CTB_MESSAGE_COLOR "\033[0;35m"           // Purple
 // clang-format on
 

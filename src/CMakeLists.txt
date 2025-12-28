@@ -1,6 +1,7 @@
 # --- Library ---
 add_library(c_traceback STATIC
     c_traceback.c
+    log_inline.c
     utils.c
 )
 add_library(c_traceback::c_traceback ALIAS c_traceback)

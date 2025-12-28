@@ -8,18 +8,13 @@ void inline_warning();
 void inline_warning_level2();
 void inline_message();
 void inline_message_level2();
+void function_a();
+void function_b();
+void function_c();
+void recursion(int i);
 
 int main(void)
 {
-    // Make context
-    CTB_Context *ctb_context = ctb_make_context();
-    if (!ctb_context)
-    {
-        fprintf(stderr, "Error: unable to make ctb_context");
-        fflush(stderr);
-        goto error;
-    }
-
     // Inline functions
     printf("=============== Inline examples ===============\n");
     fflush(stdout);
@@ -27,6 +22,11 @@ int main(void)
     inline_error();
     inline_warning();
     inline_message();
+
+    printf("============= Stacktrace example ==============\n");
+    fflush(stdout);
+
+    CTB_WRAP(function_a());
 
     printf("===============================================\n");
     fflush(stdout);
@@ -78,4 +78,30 @@ void inline_message()
 void inline_message_level2()
 {
     CTB_LOG_MESSAGE_INLINE("This should be inline message level 2");
+}
+
+void function_a()
+{
+    CTB_WRAP(function_b());
+}
+
+void function_b()
+{
+    CTB_WRAP(function_c());
+}
+
+void function_c()
+{
+    int i = 0;
+    CTB_WRAP(recursion(i));
+}
+
+void recursion(int i)
+{
+    if (i >= 125)
+    {
+        return;
+    }
+
+    CTB_WRAP(recursion(i + 1));
 }

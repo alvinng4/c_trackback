@@ -13,8 +13,21 @@
 
 typedef struct CTB_Context CTB_Context;
 
-// Maximum number of traceback frames
-#define MAX_TRACEBACK_FRAMES 64
+// Maximum number of call stack frames
+#define MAX_CALL_STACK_DEPTH 64
+
+/**
+ * \brief Wrapper macro to automatically manage call stack frames.
+ *
+ * \param[in] call The function call to be wrapped.
+ */
+#define CTB_WRAP(call)                                                                 \
+    do                                                                                 \
+    {                                                                                  \
+        ctb_push_call_stack_frame(__FILE__, __func__, __LINE__, #call);                \
+        (call);                                                                        \
+        ctb_pop_call_stack_frame();                                                    \
+    } while (0)
 
 /**
  * \brief Wrapper for logging an error to stderr without stacktrace.
@@ -51,8 +64,21 @@ typedef struct CTB_Context CTB_Context;
         ctb_log_message_inline(__FILE__, __LINE__, __func__, msg);                     \
     } while (0)
 
-CTB_Context *ctb_make_context(void);
-void ctb_free_context(CTB_Context *restrict context);
+/**
+ * \brief Push a new call stack frame.
+ * \param[in] file File where the function is called.
+ * \param[in] func Function name where the function is called.
+ * \param[in] line Line number where the function is called.
+ * \param[in] source_code Source code of the function call.
+ */
+void ctb_push_call_stack_frame(
+    const char *file, const char *func, const int line, const char *source_code
+);
+
+/**
+ * \brief Pop the top call stack frame.
+ */
+void ctb_pop_call_stack_frame(void);
 
 /**
  * \brief Log error message to stderr without stacktrace.
