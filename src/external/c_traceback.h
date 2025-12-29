@@ -23,6 +23,14 @@
 // Maximum length of error message
 #define CTB_MAX_ERROR_MESSAGE_LENGTH 256
 
+#define CTB_BLOCK(...)                                                                 \
+    do                                                                                 \
+    {                                                                                  \
+        ctb_push_call_stack_frame(__FILE__, __func__, __LINE__, #__VA_ARGS__);                 \
+        __VA_ARGS__                                                                   \
+        ctb_pop_call_stack_frame(__FILE__, __func__, __LINE__, #__VA_ARGS__);                                                    \
+    } while (0)
+
 /**
  * \brief Wrapper macro to automatically manage call stack frames.
  *
