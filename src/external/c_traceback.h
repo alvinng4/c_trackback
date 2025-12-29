@@ -29,16 +29,16 @@
     } while (0)
 
 /**
- * \brief Wrapper macro to automatically manage call stack frames.
+ * \brief Wrapper macro for expression to automatically manage call stack frames.
  *
- * \param[in] call The function call to be wrapped.
+ * \param[in] expr The expression to be wrapped.
  */
-#define CTB_WRAP(call)                                                                 \
+#define CTB_WRAP(expr)                                                                 \
     do                                                                                 \
     {                                                                                  \
-        ctb_push_call_stack_frame(__FILE__, __func__, __LINE__, #call);                \
-        (call);                                                                        \
-        ctb_pop_call_stack_frame(__FILE__, __func__, __LINE__, #call);                 \
+        ctb_push_call_stack_frame(__FILE__, __func__, __LINE__, #expr);                \
+        (expr);                                                                        \
+        ctb_pop_call_stack_frame(__FILE__, __func__, __LINE__, #expr);                 \
     } while (0)
 
 /**

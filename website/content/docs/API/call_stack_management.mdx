@@ -1,0 +1,85 @@
+---
+title: Call Stack Management
+---
+
+import ParamsTable from "components/params-table.tsx";
+
+# Call Stack Management
+
+In order to obtain the traceback in run time, we need to actively manage the call stack.
+It is not difficult, but functions or code blocks have to be wrapped with a macro, which 
+is quite verbose.
+
+## API
+
+### `CTB_WRAP` <Badge text="Macro" />
+Wrapper macro for expression to automatically manage call stack frames.
+
+#### Parameters
+<ParamsTable 
+  params={[
+    { name: "expr", type: "N/A", desc: "The expression to be wrapped." },
+  ]}
+/>
+
+#### Usage
+```c
+int function_a(void)
+{
+    CTB_WRAP(function_b());    // Wrap a function call
+}
+
+int function_b(void)
+{
+    int i = 0;
+    CTB_WRAP(i = 2);           // Wrap an assignment
+}
+```
+
+#### Expands to
+```c
+do                                                                                 
+{                                                                                  
+    ctb_push_call_stack_frame(__FILE__, __func__, __LINE__, #expr);                
+    (expr);                                                                
+    ctb_pop_call_stack_frame(__FILE__, __func__, __LINE__, #expr);                 
+} while (0)
+```
+
+### `CTB_Block` <Badge text="Macro" />
+Wrapper macro for a code block to automatically manage call stack frames.
+
+#### Parameters
+<ParamsTable 
+  params={[
+    { name: "...", type: "N/A", desc: "The block of code to be wrapped." },
+  ]}
+/>
+
+#### Usage
+```c
+int function_a(void)
+{
+    /* Wrap a code block */
+    CTB_BLOCK(
+        int i = 0;
+        if (i == 0)
+        {
+            printf("%d", i);
+        }
+    );      // <-- Don't forget the semi-colon
+
+    // Note: i is not accessible here
+    // printf("%d", i); <-- Illegal!
+}
+```
+
+#### Expands to
+```c
+do                                                                                
+{                                                                                 
+    ctb_push_call_stack_frame(__FILE__, __func__, __LINE__, #__VA_ARGS__);        
+    __VA_ARGS__                                                                   
+    ctb_pop_call_stack_frame(__FILE__, __func__, __LINE__, #__VA_ARGS__);          
+} while (0)
+```
