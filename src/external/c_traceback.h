@@ -14,8 +14,6 @@
 #include "c_traceback_colors.h"
 #include "c_traceback_errors.h"
 
-typedef struct CTB_Context CTB_Context;
-
 // Maximum number of call stack frames
 #define CTB_MAX_CALL_STACK_DEPTH 32
 

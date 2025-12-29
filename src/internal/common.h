@@ -27,12 +27,12 @@ typedef struct CTB_Error_Snapshot_
     CTB_Frame_ call_stack_frames[CTB_MAX_CALL_STACK_DEPTH];
 } CTB_Error_Snapshot_;
 
-struct CTB_Context
+typedef struct CTB_Context
 {
     int num_errors;
     int call_depth;
     CTB_Frame_ call_stack_frames[CTB_MAX_CALL_STACK_DEPTH];
     CTB_Error_Snapshot_ error_snapshots[CTB_MAX_NUM_ERROR];
-};
+} CTB_Context;
 
 #endif /* COMMON_H */
