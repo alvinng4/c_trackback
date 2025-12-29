@@ -1,7 +1,9 @@
 name: Deploy Nextra Docs to GitHub Pages
 
 on:
-  push:
+  pull_request:
+    types:
+      - closed
     branches:
       - main
   workflow_dispatch:
@@ -18,6 +20,7 @@ concurrency:
 jobs:
   build:
     runs-on: ubuntu-latest
+    if: github.event.pull_request.merged == true && github.event.pull_request.head.ref == 'website'
 
     steps:
       - name: Checkout
@@ -50,7 +53,6 @@ jobs:
         uses: actions/upload-pages-artifact@v3
         with:
           path: ./website/out
-        working-directory: website
 
   deploy:
     needs: build
