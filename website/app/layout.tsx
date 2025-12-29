@@ -6,6 +6,8 @@ import {Metadata} from "next";
 import {NextraSearchDialog} from "@/components/nextra-search-dialog";
 import {getPagesFromPageMap} from "@/lib/getPagesFromPageMap";
 
+import { prefix } from "@/prefix";
+
 export const metadata: Metadata = {
     // Define your metadata here
     // For more information on metadata API, see: https://nextjs.org/docs/app/building-your-application/optimizing/metadata
@@ -17,14 +19,14 @@ const navbar = (
         logo={
             <div style={{ display: "flex", alignItems: "center", gap: "0.5rem" }}>
             <img
-                src="/images/general/logo.svg"
+                src={`${prefix}/images/general/logo.svg`}
                 alt="Logo light"
                 width={20}
                 height={20}
                 className="block dark:hidden"
             />
             <img
-                src="/images/general/logo_dark.svg"
+                src={`${prefix}/images/general/logo_dark.svg`}
                 alt="Logo dark"
                 width={20}
                 height={20}

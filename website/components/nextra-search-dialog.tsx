@@ -10,6 +10,8 @@ import {useRouter} from "next/navigation";
 import {PageItem} from "@/lib/getPagesFromPageMap";
 import {Kbd} from "@/components/ui/kbd";
 
+import { prefix } from "@/prefix";
+
 type Props = {
     placeholder?: string;
     pages?: PageItem[];
@@ -337,7 +339,7 @@ function highlightQuery(text: string, query: string) {
     const parts = text.split(regex);
 
     return parts.map((part, index) =>
-        regex.test(part) ? <mark key={index} className="bg-primary text-primary-foreground rounded-[3px] font-medium">{part}</mark> : part
+        regex.test(part) ? <mark key={index} className="bg-blue-500 dark:bg-blue-500 text-primary-foreground rounded-[3px] font-medium">{part}</mark> : part
     );
 }
 
@@ -358,7 +360,7 @@ declare global {
 async function importPagefind() {
     if (window.pagefind) return;
     window.pagefind = await import(
-        /* webpackIgnore: true */ addBasePath('/_pagefind/pagefind.js')
+        /* webpackIgnore: true */ addBasePath(`${prefix}/_pagefind/pagefind.js` )
         );
     await window.pagefind.options({
         baseUrl: '/'

@@ -1,7 +1,8 @@
 {
   "name": "nextra-docs-starter",
-  "version": "1.0.0",
-  "description": "Nextra docs starter with search included.",
+  "version": "0.0.1",
+  "description": "A colorful, lightweight error-propagation framework for C.",
+  "type": "module",
   "scripts": {
     "dev": "next dev",
     "build": "next build",
@@ -10,14 +11,14 @@
   },
   "repository": {
     "type": "module",
-    "url": "https://github.com/phucbm/nextra-docs-starter"
+    "url": "https://github.com/alvinng4/c_traceback"
   },
   "author": "PHUCBM",
   "license": "MIT",
   "bugs": {
-    "url": "https://github.com/phucbm/nextra-docs-starter/issues"
+    "url": "https://github.com/alvinng4/c_traceback/issues"
   },
-  "homepage": "https://github.com/phucbm/nextra-docs-starter#readme",
+  "homepage": "https://github.com/alvinng4/c_traceback#readme",
   "dependencies": {
     "@radix-ui/react-dialog": "^1.1.15",
     "@tailwindcss/postcss": "^4.1.18",
