@@ -90,8 +90,13 @@ void function_a()
 
 void function_b()
 {
-    int i = 0;
-    CTB_WRAP(recursion(i));
+    CTB_BLOCK(
+        int i = 0;
+        if (1)
+        {
+            recursion(i);
+        }
+    );
     ctb_raise_error(CTB_CHILD_PROCESS_ERROR, "Hello :)");
 }
 
