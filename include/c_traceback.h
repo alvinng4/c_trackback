@@ -29,6 +29,20 @@
      !ctb_check_error_occurred())
 
 /**
+ * \brief Wrapper macro for expression to automatically manage call stack frames without
+ * return value.
+ *
+ * \param[in] expr The expression to be traced.
+ */
+#define TRACE_VOID(expr)                                                               \
+    do                                                                                 \
+    {                                                                                  \
+        ctb_push_call_stack_frame(__FILE__, __func__, __LINE__, #expr);                \
+        (expr);                                                                        \
+        ctb_pop_call_stack_frame(__FILE__, __func__, __LINE__, #expr);                 \
+    } while (0)
+
+/**
  * \brief Wrapper macro for a code block to automatically manage call stack frames.
  *
  * \param[in] ... The block of code to be traced.
