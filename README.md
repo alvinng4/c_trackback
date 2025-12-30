@@ -1,6 +1,6 @@
-# c_traceback
+# C Traceback
 A colorful, lightweight error-propagation framework for C.
 
-Website (in development): [https://www.alvinng4.github.io/c_traceback/](https://www.alvinng4.github.io/c_traceback/)
+Website: [https://www.ctraceback.com](https://www.ctraceback.com)
 
 This library is in early development. Come back later!
