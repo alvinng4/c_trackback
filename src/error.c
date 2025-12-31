@@ -10,7 +10,7 @@
 #include <stdio.h>
 #include <string.h>
 
-#include "internal/context.h"
+#include "internal/trace.h"
 
 /**
  * \brief Setup error snapshot core information without message.
