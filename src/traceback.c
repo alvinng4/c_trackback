@@ -10,7 +10,7 @@
 #include <string.h>
 
 #include "c_traceback.h"
-#include "internal/context.h"
+#include "internal/trace.h"
 #include "internal/utils.h"
 
 /**

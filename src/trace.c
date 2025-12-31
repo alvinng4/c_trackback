@@ -6,7 +6,7 @@
  * \author Ching-Yin Ng
  */
 
-#include "internal/context.h"
+#include "internal/trace.h"
 
 static CTB_Context ctb_traceback_context = {0};
 
