@@ -1,19 +1,16 @@
 /**
- * \file c_traceback.c
- * \brief Main definitions for c_traceback library
+ * \file traceback.c
+ * \brief Function definitions for traceback logging.
  *
  * \author Ching-Yin Ng
  */
 
-#include <stdarg.h>
 #include <stdbool.h>
 #include <stdio.h>
-#include <stdlib.h>
 #include <string.h>
 
 #include "c_traceback.h"
-#include "c_traceback_errors.h"
-#include "internal/common.h"
+#include "internal/context.h"
 #include "internal/utils.h"
 
 /**
@@ -24,102 +21,6 @@
  * \param[in] frame The frame to print.
  * \param[in] use_color Whether to use color in the output.
  */
-static void
-print_frame(FILE *stream, int index, const CTB_Frame_ *frame, bool use_color);
-
-static CTB_Context traceback_context = {0};
-
-static CTB_Context *get_context(void)
-{
-    return &traceback_context;
-}
-
-void ctb_push_call_stack_frame(
-    const char *file, const char *func, const int line, const char *source_code
-)
-{
-    CTB_Context *context = get_context();
-    const int call_depth = context->call_depth;
-    int frame_index = call_depth;
-
-    if (call_depth < 0)
-    {
-        return;
-    }
-
-    if (call_depth >= CTB_MAX_CALL_STACK_DEPTH)
-    {
-        frame_index = CTB_MAX_CALL_STACK_DEPTH - 1;
-    }
-
-    CTB_Frame_ *frame = &context->call_stack_frames[frame_index];
-    frame->filename = file;
-    frame->function_name = func;
-    frame->line_number = line;
-    frame->source_code = source_code;
-    context->call_depth++;
-}
-
-void ctb_pop_call_stack_frame(
-    const char *file, const char *func, const int line, const char *source_code
-)
-{
-    CTB_Context *context = get_context();
-    if (context->call_depth <= 0)
-    {
-        return;
-    }
-
-    (context->call_depth)--;
-    if (context->call_depth <= CTB_MAX_CALL_STACK_DEPTH)
-    {
-        return;
-    }
-
-    CTB_Frame_ *frame = &context->call_stack_frames[CTB_MAX_CALL_STACK_DEPTH - 1];
-    frame->filename = file;
-    frame->function_name = func;
-    frame->line_number = line;
-    frame->source_code = source_code;
-}
-
-void ctb_raise_error(CTB_Error error, const char *restrict msg, ...)
-{
-    CTB_Context *context = get_context();
-    (context->num_errors)++;
-
-    const int num_errors = context->num_errors;
-    if (num_errors >= 0 && num_errors < CTB_MAX_NUM_ERROR)
-    {
-        CTB_Error_Snapshot_ *error_snapshot =
-            &(context->error_snapshots[num_errors - 1]);
-        error_snapshot->error = error;
-        error_snapshot->call_depth = context->call_depth;
-        memcpy(
-            error_snapshot->call_stack_frames,
-            context->call_stack_frames,
-            sizeof(CTB_Frame_) * CTB_MAX_CALL_STACK_DEPTH
-        );
-
-        va_list args;
-        va_start(args, msg);
-        vsnprintf(
-            error_snapshot->error_message, CTB_MAX_ERROR_MESSAGE_LENGTH, msg, args
-        );
-        va_end(args);
-    }
-}
-
-bool ctb_check_error_occurred(void)
-{
-    return get_context()->num_errors > 0;
-}
-
-void ctb_clear_error(void)
-{
-    get_context()->num_errors = 0;
-}
-
 static void
 print_frame(FILE *stream, int index, const CTB_Frame_ *frame, bool use_color)
 {

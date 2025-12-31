@@ -1,8 +1,8 @@
 /**
  * \file utils.c
- * \brief Utility functions for C traceback library.
+ * \brief Utility functions for C Traceback library.
  *
- * \author Ching-Yin NG
+ * \author Ching-Yin Ng
  */
 
 #include <stdbool.h>

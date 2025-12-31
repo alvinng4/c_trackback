@@ -1,6 +1,6 @@
 /**
- * \file error.c
- * \brief Function definitions for inline logging
+ * \file log_inline.c
+ * \brief Function definitions for inline logging.
  *
  * \author Ching-Yin Ng
  */

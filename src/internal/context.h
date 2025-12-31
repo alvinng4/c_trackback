@@ -1,15 +1,15 @@
 /**
- * \file common.h
- * \brief Common definitions for c_traceback library
+ * \file context.h
+ * \brief Definitions of context and related data structures, and related function
+ * headers for C Traceback library.
  *
  * \author Ching-Yin Ng
  */
 
-#ifndef COMMON_H
-#define COMMON_H
+#ifndef CONTEXT_H
+#define CONTEXT_H
 
 #include "c_traceback.h"
-#include "c_traceback_errors.h"
 
 typedef struct CTB_Frame_
 {
@@ -35,4 +35,11 @@ typedef struct CTB_Context
     CTB_Error_Snapshot_ error_snapshots[CTB_MAX_NUM_ERROR];
 } CTB_Context;
 
-#endif /* COMMON_H */
+/**
+ * \brief Get the global C Traceback context.
+ *
+ * \return Pointer to the global C Traceback context.
+ */
+CTB_Context *get_context(void);
+
+#endif /* CONTEXT_H */
