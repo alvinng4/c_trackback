@@ -87,9 +87,19 @@ static void print_separator(FILE *stream, bool use_color)
                                                          : terminal_width;
 
     fprintf(stream, "%s", color_error);
-    for (int i = 0; i < separator_width; i++)
+    if (should_use_utf8(stream))
     {
-        fputc('-', stream);
+        for (int i = 0; i < separator_width; i++)
+        {
+            fputs("\u2500", stream);
+        }
+    }
+    else
+    {
+        for (int i = 0; i < separator_width; i++)
+        {
+            fputs("-", stream);
+        }
     }
     fprintf(stream, "%s", color_reset);
 }

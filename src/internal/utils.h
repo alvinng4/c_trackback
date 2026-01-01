@@ -13,6 +13,14 @@
 #include "c_traceback_errors.h"
 
 /**
+ * \brief Determine if we should use UTF-8 encoding for the given output stream.
+ *
+ * \param[in] stream The output stream (e.g., stdout, stderr).
+ * \return true if UTF-8 encoding should be used, false otherwise.
+ */
+bool should_use_utf8(FILE *stream);
+
+/**
  * \brief Determine if ANSI color codes should be used for the given output stream.
  *
  * \param[in] stream The output stream (e.g., stdout, stderr).

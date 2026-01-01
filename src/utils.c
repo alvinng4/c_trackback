@@ -5,6 +5,7 @@
  * \author Ching-Yin Ng
  */
 
+#include <ctype.h>
 #include <stdbool.h>
 #include <stdio.h>
 #include <stdlib.h>
@@ -19,6 +20,7 @@
 #define ISATTY _isatty
 #define FILENO _fileno
 #else
+#include <langinfo.h>
 #include <sys/ioctl.h>
 #include <unistd.h>
 #define ISATTY isatty
@@ -30,6 +32,87 @@
 #else
 #define IS_PATH_SEPARATOR(c) ((c) == '/')
 #endif
+
+/**
+ * \brief Helper function to search for UTF-8 indicators in a string.
+ *
+ * \param[in] str The string to search.
+ * \return true if any UTF-8 indicators are found, false otherwise.
+ */
+static bool contains_utf8_case_insensitive(const char *str)
+{
+    if (!str)
+    {
+        return false;
+    }
+
+    while (*str)
+    {
+        if (tolower((unsigned char)str[0]) == 'u' &&
+            tolower((unsigned char)str[1]) == 't' &&
+            tolower((unsigned char)str[2]) == 'f')
+        {
+            // Check for "utf8" or "utf-8"
+            if (str[3] == '8')
+            {
+                return true;
+            }
+            if (str[3] == '-' && str[4] == '8')
+            {
+                return true;
+            }
+        }
+        str++;
+    }
+    return false;
+}
+
+/**
+ * \brief Helper function to determine if the terminal supports UTF-8 encoding.
+ *
+ * \return true if the terminal supports UTF-8, false otherwise.
+ */
+static bool terminal_supports_utf8(void)
+{
+#ifdef _WIN32
+    return GetConsoleOutputCP() == CP_UTF8;
+#else
+    const char *codeset = nl_langinfo(CODESET);
+    if (codeset && contains_utf8_case_insensitive(codeset))
+    {
+        return true;
+    }
+
+    const char *env_vars[] = {"LC_ALL", "LC_CTYPE", "LANG"};
+    for (int i = 0; i < 3; i++)
+    {
+        const char *val = getenv(env_vars[i]);
+        if (val && val[0])
+        {
+            if (contains_utf8_case_insensitive(val))
+            {
+                return true;
+            }
+
+            if (i == 0)
+            {
+                return false;
+            }
+        }
+    }
+    return false;
+#endif
+}
+
+bool should_use_utf8(FILE *stream)
+{
+    if (!ISATTY(FILENO(stream)))
+    {
+        return true;
+    }
+
+    return terminal_supports_utf8();
+}
 
 bool should_use_color(FILE *stream)
 {
