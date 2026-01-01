@@ -14,7 +14,7 @@ void recursion(int count)
         return;
     }
 
-    TRACE_VOID(recursion(count + 1));
+    TRACE(recursion(count + 1));
 }
 
 int main(void)

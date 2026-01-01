@@ -39,44 +39,6 @@
     } while (0)
 
 /**
- * \brief Wrapper for an expression. If an error occurs after the expression, jump to
- * label.
- *
- * \param[in] expr The expression to be traced.
- * \param[in] label The label to jump to on error.
- */
-#define TRY_GOTO(expr, label)                                                          \
-    do                                                                                 \
-    {                                                                                  \
-        ctb_push_call_stack_frame(__FILE__, __func__, __LINE__, #expr);                \
-        (expr);                                                                        \
-        ctb_pop_call_stack_frame();                                                    \
-        if (ctb_check_error_occurred())                                                \
-        {                                                                              \
-            goto label;                                                                \
-        }                                                                              \
-    } while (0)
-
-/**
- * \brief Wrapper for a block of code. If an error occurs after the block executes, jump
- * to label.
- *
- * \param[in] label The label to jump to on error.
- * \param[in] ...   The block of code to be traced.
- */
-#define TRY_BLOCK_GOTO(label, ...)                                                     \
-    do                                                                                 \
-    {                                                                                  \
-        ctb_push_call_stack_frame(__FILE__, __func__, __LINE__, #__VA_ARGS__);         \
-        __VA_ARGS__                                                                    \
-        ctb_pop_call_stack_frame();                                                    \
-        if (ctb_check_error_occurred())                                                \
-        {                                                                              \
-            goto label;                                                                \
-        }                                                                              \
-    } while (0)
-
-/**
  * \brief Raise an error with the current call stack.
  *
  * \param[in] error The error type.
