@@ -32,7 +32,7 @@ static void do_calculation(double *vec)
     {
         vec[i] = 0;
     }
-    int success = TRACE(division_vec(vec, 0)); // Throw error
+    int success = TRY(division_vec(vec, 0)); // Throw error
     if (!success)
     {
         return;
