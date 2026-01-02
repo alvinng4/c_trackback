@@ -18,6 +18,10 @@
 #include "c_traceback/traceback.h"
 #include "c_traceback_errors.h"
 
+#ifndef CTB_VERSION
+#define CTB_VERSION "Unknown"
+#endif
+
 /**
  * Traceback header
  * (i.e. the title printed at the top of the traceback output
@@ -46,8 +50,14 @@
 // Output width when printing to file
 #define CTB_FILE_OUTPUT_WIDTH 120
 
-// Separator length
-#define CTB_SEPARATOR_MAX_LENGTH 120
-#define CTB_SEPARATOR_MIN_LENGTH 50
+// Horizontal rule width
+#define CTB_HRULE_MAX_WIDTH 120
+#define CTB_HRULE_MIN_WIDTH 50
+
+/**
+ * \brief Print compilation information such as compiler version,
+ *        compilation date, and configurations.
+ */
+void ctb_print_compilation_info(void);
 
 #endif /* C_TRACEBACK_H */

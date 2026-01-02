@@ -74,34 +74,134 @@ print_frame(FILE *stream, int index, const CTB_Frame_ *frame, bool use_color)
     // clang-format on
 }
 
-static void print_separator(FILE *stream, bool use_color)
+/**
+ * \brief Helper function to print a horizontal rule.
+ *
+ * \param[in] stream The output stream.
+ * \param[in] use_color Whether to use color in the output.
+ * \param[in] color The color code to use for the horizontal rule.
+ */
+static void print_hrule(FILE *stream, bool use_color, const char *restrict color)
 {
-    const char *color_error = use_color ? CTB_ERROR_COLOR : "";
-    const char *color_reset = use_color ? CTB_RESET_COLOR : "";
-
     const int terminal_width = get_terminal_width(stream);
-    const int max = CTB_SEPARATOR_MAX_LENGTH;
-    const int min = CTB_SEPARATOR_MIN_LENGTH;
+    const int max = CTB_HRULE_MAX_WIDTH;
+    const int min = CTB_HRULE_MIN_WIDTH;
     const int separator_width = (terminal_width < min)   ? min
                                 : (terminal_width > max) ? max
                                                          : terminal_width;
+    const char *dash = should_use_utf8(stream) ? "\u2500" : "-";
 
-    fprintf(stream, "%s", color_error);
-    if (should_use_utf8(stream))
+    if (use_color)
     {
-        for (int i = 0; i < separator_width; i++)
+        fprintf(stream, "%s", color);
+    }
+
+    for (int i = 0; i < separator_width; i++)
+    {
+        fputs(dash, stream);
+    }
+
+    if (use_color)
+    {
+        fprintf(stream, "%s", CTB_RESET_COLOR);
+    }
+
+    fputs("\n", stream);
+}
+
+/**
+ * \brief Helper function to print a horizontal rule with a header.
+ *
+ * \param[in] stream The output stream.
+ * \param[in] use_color Whether to use color in the output.
+ * \param[in] color The color code to use for the horizontal rule.
+ * \param[in] header The header text to display in the middle of the rule.
+ */
+static void print_hrule_with_header(
+    FILE *stream,
+    bool use_color,
+    const char *restrict color,
+    const char *restrict header
+)
+{
+    const int terminal_width = get_terminal_width(stream);
+    const int max = CTB_HRULE_MAX_WIDTH;
+    const int min = CTB_HRULE_MIN_WIDTH;
+    const int separator_width = (terminal_width < min)   ? min
+                                : (terminal_width > max) ? max
+                                                         : terminal_width;
+    const char *dash = should_use_utf8(stream) ? "\u2500" : "-";
+    const int header_width = (int)strlen(header);
+    int left_width = 0;
+    int right_width = 0;
+
+    if (header_width > 0)
+    {
+        const int padding = 2;
+        const int available_space = separator_width - header_width - padding;
+
+        if (available_space > 0)
         {
-            fputs("\u2500", stream);
+            left_width = available_space / 2;
+            right_width = available_space - left_width;
+        }
+        else
+        {
+            left_width = 2;
+            right_width = 2;
         }
     }
     else
     {
-        for (int i = 0; i < separator_width; i++)
-        {
-            fputs("-", stream);
-        }
+        // No label, print full line
+        left_width = separator_width;
+        right_width = 0;
     }
-    fprintf(stream, "%s", color_reset);
+
+    if (use_color)
+    {
+        fprintf(stream, "%s", color);
+    }
+
+    for (int i = 0; i < left_width; i++)
+    {
+        fputs(dash, stream);
+    }
+
+    fprintf(stream, " %s ", header);
+
+    for (int i = 0; i < right_width; i++)
+    {
+        fputs(dash, stream);
+    }
+
+    if (use_color)
+    {
+        fprintf(stream, "%s", CTB_RESET_COLOR);
+    }
+
+    fputs("\n", stream);
+}
+
+/**
+ * \brief Helper function to print bold text.
+ *
+ * \param[in] stream The output stream.
+ * \param[in] use_color Whether to use color in the output.
+ * \param[in] color The color code to use for the bold text.
+ * \param[in] text The text to print in bold.
+ */
+static void
+print_bold(FILE *stream, bool use_color, const char *color, const char *text)
+{
+    if (use_color)
+    {
+        fprintf(stream, "%s%s%s", color, text, CTB_RESET_COLOR);
+    }
+    else
+    {
+        fputs(text, stream);
+    }
 }
 
 void ctb_log_error_traceback(void)
@@ -123,7 +223,7 @@ void ctb_log_error_traceback(void)
     const char *color_another_exception =
         use_color ? CTB_TRACEBACK_ANOTHER_EXCEPTION_TEXT_COLOR : "";
 
-    print_separator(stream, use_color);
+    print_hrule(stream, use_color, CTB_ERROR_COLOR);
 
     if (num_errors_to_print > 0)
     {
@@ -139,7 +239,7 @@ void ctb_log_error_traceback(void)
             {
                 fprintf(
                     stream,
-                    "\n%s%s%s %s(most recent call last):%s\n",
+                    "%s%s%s %s(most recent call last):%s\n",
                     color_error_bold,
                     CTB_TRACEBACK_HEADER,
                     color_reset,
@@ -151,7 +251,7 @@ void ctb_log_error_traceback(void)
             {
                 fprintf(
                     stream,
-                    "\n%sTraceback%s %s(most recent call last):%s\n",
+                    "%sTraceback%s %s(most recent call last):%s\n",
                     color_error_bold,
                     color_reset,
                     color_error,
@@ -193,7 +293,7 @@ void ctb_log_error_traceback(void)
                 fprintf(
                     stream,
                     "\n%sDuring handling of the above exception, another exception "
-                    "occurred:%s\n",
+                    "occurred:%s\n\n",
                     color_another_exception,
                     color_reset
                 );
@@ -205,8 +305,7 @@ void ctb_log_error_traceback(void)
         fputs("There is no recorded error!\n", stream);
     }
 
-    print_separator(stream, use_color);
-    fputc('\n', stream);
+    print_hrule(stream, use_color, CTB_ERROR_COLOR);
     fflush(stream);
 }
 
@@ -214,4 +313,233 @@ void ctb_dump_traceback(void)
 {
     ctb_log_error_traceback();
     ctb_clear_error();
+}
+
+/**
+ * \brief Helper function to print the left column of the compilation info.
+ *
+ * \param[in] stream The output stream.
+ * \param[in] use_color Whether to use color in the output.
+ * \param[in] logo_lines The lines of the logo to print.
+ * \param[in] logo_height The height of the logo.
+ * \param[in] logo_width The width of the logo.
+ * \param[in] left_padding The left padding before the logo.
+ * \param[in] gutter The gutter space after the logo.
+ * \param[in] line_idx The current line index to print.
+ */
+static void print_compilation_info_left_column(
+    FILE *stream,
+    const bool use_color,
+    const char *restrict logo_lines[],
+    const int logo_height,
+    const int logo_width,
+    const int left_padding,
+    const int gutter,
+    int line_idx
+)
+{
+    const char *color_reset = use_color ? CTB_RESET_COLOR : "";
+    const char *color_theme_bold = use_color ? CTB_THEME_BOLD_COLOR : "";
+
+    if (line_idx < logo_height)
+    {
+        fprintf(
+            stream,
+            "%*s%s%s%s%*s",
+            left_padding,
+            "",
+            color_theme_bold,
+            logo_lines[line_idx],
+            color_reset,
+            gutter,
+            ""
+        );
+    }
+    else
+    {
+        fprintf(stream, "%*s", left_padding + logo_width + gutter, "");
+    }
+}
+
+void ctb_print_compilation_info(void)
+{
+    FILE *const stream = stdout;
+    const bool use_color = should_use_color(stream);
+    const char *dash = should_use_utf8(stream) ? "\u2500" : "-";
+
+    // int terminal_width;
+    // {
+    //     const int temp = get_terminal_width(stream);
+    //     const int max = CTB_HRULE_MAX_WIDTH;
+    //     const int min = CTB_HRULE_MIN_WIDTH;
+    //     terminal_width = (temp < min) ? min : (temp > max) ? max : temp;
+    // }
+
+    const char *logo_lines[] = {
+        "    %%%%%%%%%%%%    ",
+        "  %%%%%%%%%%%%%%%%  ",
+        " %%%%%%%%%%%%%%%%%% ",
+        "%%%%%%%%%%*  %%%%%%%",
+        "%%%%%%%*     %%%%%%%",
+        "%%%%%*       %%%%%%%",
+        "%%%%%%%*     %%%%%%%",
+        "%%%%%%%%%%*  %%%%%%%",
+        " %%%%%%%%%%%%%%%%%% ",
+        "  %%%%%%%%%%%%%%%%  ",
+        "    %%%%%%%%%%%%    "
+    };
+
+    const int logo_height = sizeof(logo_lines) / sizeof(logo_lines[0]);
+    const int logo_width = strlen(logo_lines[0]);
+    const int left_padding = 2;
+    const int gutter = 4;
+    // const int left_col_total = left_padding + logo_width + gutter;
+    // const int right_col_max_width = terminal_width - left_col_total;
+
+    print_hrule_with_header(
+        stream, use_color, CTB_THEME_COLOR, "C Traceback Compilation Info"
+    );
+
+    // Sorry, but right now its hard-coded, and without
+    // terminal width calculation for wrapping.
+    int current_line = 0;
+    const int total_items = 15;
+    for (int i = 0; i < total_items; i++)
+    {
+        print_compilation_info_left_column(
+            stream,
+            use_color,
+            logo_lines,
+            logo_height,
+            logo_width,
+            left_padding,
+            gutter,
+            current_line
+        );
+
+        if (i == 0)
+        {
+            /* Version */
+            print_bold(
+                stream, use_color, CTB_THEME_BOLD_COLOR, "C Traceback Version: "
+            );
+            fputs(CTB_VERSION, stream);
+        }
+        else if (i == 1)
+        {
+            /* OS information */
+            print_bold(stream, use_color, CTB_THEME_BOLD_COLOR, "Operating System: ");
+#ifdef _WIN32
+            fputs("Windows", stream);
+#elif __APPLE__
+            fputs("MacOS", stream);
+#elif __linux__
+            fputs("Linux", stream);
+#else
+            fputs("Unknown", stream);
+#endif
+        }
+        else if (i == 2)
+        {
+            /* Build date and time */
+            print_bold(stream, use_color, CTB_THEME_BOLD_COLOR, "Build Date: ");
+            fprintf(stream, "%s %s", __DATE__, __TIME__);
+        }
+        else if (i == 3)
+        {
+            /* Compiler information */
+            print_bold(stream, use_color, CTB_THEME_BOLD_COLOR, "Compiler: ");
+#ifdef _MSC_VER
+            fprintf(stream, "MSVC (version: %d)", _MSC_VER);
+#elif defined(__clang__)
+            fprintf(stream, "Clang (version: %d)", __clang_major__);
+#elif defined(__GNUC__)
+            fprintf(stream, "GCC (version: %d)", __GNUC__);
+#else
+            fputs("Unknown", stream);
+#endif
+        }
+
+        /* Config */
+        else if (i == 5)
+        {
+            print_bold(stream, use_color, CTB_THEME_BOLD_COLOR, "Config");
+        }
+        else if (i == 6)
+        {
+            for (int d = 0; d < 6; d++)
+            {
+                fputs(dash, stream);
+            }
+        }
+        else if (i == 7)
+        {
+            print_bold(
+                stream, use_color, CTB_THEME_BOLD_COLOR, "Max Call Stack Depth: "
+            );
+            fprintf(stream, "%d", CTB_MAX_CALL_STACK_DEPTH);
+        }
+        else if (i == 8)
+        {
+            print_bold(
+                stream, use_color, CTB_THEME_BOLD_COLOR, "Max Error Message Length: "
+            );
+            fprintf(stream, "%d", CTB_MAX_ERROR_MESSAGE_LENGTH);
+        }
+        else if (i == 9)
+        {
+            print_bold(
+                stream, use_color, CTB_THEME_BOLD_COLOR, "Max Number of Errors: "
+            );
+            fprintf(stream, "%d", CTB_MAX_NUM_ERROR);
+        }
+        else if (i == 10)
+        {
+            print_bold(
+                stream, use_color, CTB_THEME_BOLD_COLOR, "Default Terminal Width: "
+            );
+            fprintf(stream, "%d", CTB_DEFAULT_TERMINAL_WIDTH);
+        }
+        else if (i == 11)
+        {
+            print_bold(stream, use_color, CTB_THEME_BOLD_COLOR, "File Output Width: ");
+            fprintf(stream, "%d", CTB_FILE_OUTPUT_WIDTH);
+        }
+        else if (i == 12)
+        {
+            print_bold(
+                stream, use_color, CTB_THEME_BOLD_COLOR, "Horizontal Rule Max Width: "
+            );
+            fprintf(stream, "%d", CTB_HRULE_MAX_WIDTH);
+        }
+        else if (i == 13)
+        {
+            print_bold(
+                stream, use_color, CTB_THEME_BOLD_COLOR, "Horizontal Rule Min Width: "
+            );
+            fprintf(stream, "%d", CTB_HRULE_MIN_WIDTH);
+        }
+
+        fprintf(stream, "\n");
+        current_line++;
+    }
+
+    while (current_line < logo_height)
+    {
+        print_compilation_info_left_column(
+            stream,
+            use_color,
+            logo_lines,
+            logo_height,
+            logo_width,
+            left_padding,
+            gutter,
+            current_line
+        );
+        fprintf(stream, "\n");
+        current_line++;
+    }
+
+    print_hrule_with_header(stream, use_color, CTB_THEME_COLOR, "END");
+    fflush(stream);
 }

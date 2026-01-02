@@ -16,8 +16,9 @@
 #define CTB_THEME_BOLD_COLOR "\033[1;36m"                   // Cyan, Bold
 
 /* Text color */
-#define CTB_TEXT_PRIMARY_COLOR ""                           // White / text color
-#define CTB_TEXT_SECONDARY_COLOR "\033[38;5;240m"          // Dark gray
+#define CTB_TEXT_PRIMARY_COLOR ""                           // Text color (default)
+#define CTB_TEXT_PRIMARY_BOLD_COLOR "\033[1m"               // Default text color, Bold
+#define CTB_TEXT_SECONDARY_COLOR "\033[38;5;240m"           // Dark gray
 
 /* Error and warning */
 #define CTB_ERROR_BOLD_COLOR "\033[1;31m"                   // Bright Red, Bold
