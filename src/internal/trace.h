@@ -11,6 +11,24 @@
 
 #include "c_traceback.h"
 
+#ifndef ctb_thread_local
+#if defined(__STDC_VERSION__) && __STDC_VERSION__ >= 202311L
+/* C23 made 'thread_local' a standard keyword. Do nothing. */
+#elif defined(__STDC_VERSION__) && __STDC_VERSION__ >= 201112L
+/* C11 provides _Thread_local.
+   Ideally, include <threads.h> which defines thread_local. */
+#define ctb_thread_local _Thread_local
+#elif defined(__GNUC__) || defined(__clang__) || defined(__MINGW32__)
+/* GCC, Clang, and MinGW use __thread for C99 */
+#define ctb_thread_local __thread
+#elif defined(_MSC_VER)
+/* MSVC (Visual Studio) uses __declspec(thread) */
+#define ctb_thread_local __declspec(thread)
+#else
+#error "Cannot define thread_local for this compiler/standard."
+#endif
+#endif
+
 typedef struct CTB_Frame_
 {
     int line_number;

@@ -16,7 +16,6 @@ Website: [https://www.ctraceback.com](https://www.ctraceback.com)
 * Detailed documentations
 
 ## To-dos before first release
-* Thread-safe
 * Test MSVC
 * Complete exceptions design
 * Signal handlers

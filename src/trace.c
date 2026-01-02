@@ -8,7 +8,7 @@
 
 #include "internal/trace.h"
 
-static CTB_Context ctb_traceback_context = {0};
+static ctb_thread_local CTB_Context ctb_traceback_context = {0};
 
 CTB_Context *get_context(void)
 {
