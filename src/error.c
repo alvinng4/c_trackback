@@ -72,7 +72,7 @@ void ctb_throw_error(
         }
         else
         {
-            error_snapshot->error_message = "";
+            error_snapshot->error_message[0] = '\0';
         }
     }
 

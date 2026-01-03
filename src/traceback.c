@@ -447,15 +447,15 @@ void ctb_print_compilation_info(void)
     );
 
     /* Prepare Config Values for printing */
-    char buf_ver[32];
-    char buf_date[64];
-    char buf_stack[16];
-    char buf_msg[16];
-    char buf_err[16];
-    char buf_term[16];
-    char buf_file[16];
-    char buf_hmax[16];
-    char buf_hmin[16];
+    char buf_ver[128];
+    char buf_date[128];
+    char buf_stack[128];
+    char buf_msg[128];
+    char buf_err[128];
+    char buf_term[128];
+    char buf_file[128];
+    char buf_hmax[128];
+    char buf_hmin[128];
 
     snprintf(buf_ver, sizeof(buf_ver), "%s", CTB_VERSION);
     snprintf(buf_date, sizeof(buf_date), "%s %s", __DATE__, __TIME__);
@@ -467,8 +467,8 @@ void ctb_print_compilation_info(void)
     snprintf(buf_hmax, sizeof(buf_hmax), "%d", CTB_HRULE_MAX_WIDTH);
     snprintf(buf_hmin, sizeof(buf_hmin), "%d", CTB_HRULE_MIN_WIDTH);
 
-    /* Construct Separator Line */
-    char separator_line[16] = {0};
+    /* Construct Horizontal Line */
+    char separator_line[64] = {0};
     for (int i = 0; i < 6; i++)
     {
         strcat(separator_line, dash);
@@ -604,28 +604,29 @@ static void safe_print_str(const char *string)
 /**
  * \brief Async-signal-safe integer writer (converts int to string).
  */
-static void safe_print_int(int n)
+static void safe_print_int(const int n)
 {
-    char buffer[32];
+    char buffer[64];
     int i = 0;
     int is_neg = 0;
+    long long x = n;
 
-    if (n == 0)
+    if (x == 0)
     {
         safe_print_str("0");
         return;
     }
 
-    if (n < 0)
+    if (x < 0)
     {
         is_neg = 1;
-        n = -n;
+        x = -x;
     }
 
-    while (n > 0)
+    while (x > 0)
     {
-        buffer[i++] = (n % 10) + '0';
-        n /= 10;
+        buffer[i++] = (x % 10) + '0';
+        x /= 10;
     }
 
     if (is_neg)
@@ -731,10 +732,7 @@ void ctb_dump_traceback_signal(const CTB_Error ctb_error)
             safe_print_str(" frames ...]\n\n");
         }
 
-        if (e != num_errors_to_print)
-        {
-            safe_print_frame(num_frames, &snapshot->error_frame);
-        }
+        safe_print_frame(num_frames, &snapshot->error_frame);
 
         /* Print Error Message */
         safe_print_str(error_to_string(snapshot->error));
@@ -756,10 +754,10 @@ void ctb_dump_traceback_signal(const CTB_Error ctb_error)
     }
 
     /* Print signal error*/
-    if (num_errors > 0)
+    if ((num_errors + 1) > 1)
     {
         safe_print_str("(#");
-        if (num_errors < 9)
+        if ((num_errors + 1) < 10)
         {
             safe_print_str("0");
         }
