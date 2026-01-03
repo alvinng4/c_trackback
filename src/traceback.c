@@ -501,7 +501,7 @@ void ctb_print_compilation_info(void)
         fputs(dash, stream);
     }
     fputs("\n", stream);
-    LOG_ERROR_INLINE(CTB_BASE_EXCEPTION, "Sample error for compilation info");
+    LOG_ERROR_INLINE(CTB_ERROR, "Sample error for compilation info");
     LOG_WARNING_INLINE(CTB_USER_WARNING, "Sample warning for compilation info");
     LOG_MESSAGE_INLINE("Sample info for compilation info");
 
@@ -556,7 +556,7 @@ void ctb_print_compilation_info(void)
         stream,
         "%s%s:%s %s%s%s\n",
         theme.error_bold,
-        error_to_string(CTB_EXCEPTION),
+        error_to_string(CTB_ERROR),
         theme.reset,
         theme.error,
         "Something went wrong!",

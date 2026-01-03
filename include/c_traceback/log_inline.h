@@ -8,7 +8,7 @@
 #ifndef C_TRACEBACK_LOG_INLINE_H
 #define C_TRACEBACK_LOG_INLINE_H
 
-#include "c_traceback_errors.h"
+#include "c_traceback/error_codes.h"
 
 /**
  * \brief Wrapper for logging an error to stderr without stacktrace.

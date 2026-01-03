@@ -16,6 +16,7 @@ option(BUILD_EXAMPLES "Build example executables" OFF)
 # --- Library ---
 add_library(c_traceback STATIC
     src/error.c
+    src/error_codes.c
     src/log_inline.c
     src/trace.c
     src/traceback.c

@@ -8,7 +8,7 @@
 #ifndef C_TRACEBACK_ERROR_H
 #define C_TRACEBACK_ERROR_H
 
-#include "c_traceback_errors.h"
+#include "c_traceback/error_codes.h"
 
 /**
  * \brief Wrapper for raising an error with the current call stack.

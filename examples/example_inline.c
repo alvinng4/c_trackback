@@ -30,8 +30,8 @@ int main(void)
 void inline_error(int i)
 {
     LOG_ERROR_INLINE_FMT(
-        CTB_ARITHMETIC_ERROR,
-        "(Test %d) This should be inline formatted error level 1 with arithmetic error",
+        CTB_MATH_ERROR,
+        "(Test %d) This should be inline formatted error level 1 with math error",
         i
     );
     inline_error_level2(i + 1);
