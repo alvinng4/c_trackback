@@ -8,9 +8,6 @@
 #ifndef C_TRACEBACK_H
 #define C_TRACEBACK_H
 
-#include <stdarg.h>
-#include <stdbool.h>
-
 #include "c_traceback/color_codes.h"
 #include "c_traceback/error.h"
 #include "c_traceback/error_codes.h"

@@ -8,6 +8,8 @@
 #ifndef C_TRACEBACK_ERROR_H
 #define C_TRACEBACK_ERROR_H
 
+#include <stdbool.h>
+
 #include "c_traceback/error_codes.h"
 
 /**
