@@ -37,7 +37,7 @@
 #define CTB_MAX_CALL_STACK_DEPTH 32
 
 // Maximum number of simultaneous errors
-#define CTB_MAX_NUM_ERROR 8
+#define CTB_MAX_NUM_ERROR 16
 
 // Maximum length of error message
 #define CTB_MAX_ERROR_MESSAGE_LENGTH 256
