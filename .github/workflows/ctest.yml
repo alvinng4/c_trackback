@@ -3,7 +3,15 @@ name: Cross-Platform Build & Test
 on:
   push:
     branches: [ "main" ]
+    paths:
+      - 'src/**'
+      - 'include/**'
+      - 'examples/**'
   pull_request:
+    paths:
+      - 'src/**'
+      - 'include/**'
+      - 'examples/**'
 
 permissions:
   contents: read
