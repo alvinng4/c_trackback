@@ -13,6 +13,12 @@ int main(void)
     ctb_clear_context();
     ctb_install_signal_handler();
 
+    LOG_WARNING(
+        CTB_DEPRECATION_WARNING,
+        "This function is deprecated and will be replaced in the next version"
+    );
+    LOG_MESSAGE("Hello, world!");
+
     double *vec = malloc(N * sizeof(double));
     if (!vec)
     {

@@ -3,7 +3,7 @@ A colorful, lightweight error-propagation framework for C.
 
 Documentation Website: [https://www.ctraceback.com](https://www.ctraceback.com)
 
-![C Traceback](.github/compilation_info.png)
+![C Traceback](.github/c_traceback.png)
 
 ## Features
 * Beautiful tracebacks
