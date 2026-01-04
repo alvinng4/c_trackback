@@ -12,11 +12,12 @@ Documentation Website: [https://www.ctraceback.com](https://www.ctraceback.com)
 * Explicit control flow
 * Works with MSVC, Clang and GCC
 * Written in C99 with minimal dependencies
-* Detailed documentations
+* [Detailed documentations](https://www.ctraceback.com/)
 
 ## Sample usage
 ```c
 #include <stdio.h>
+#include <stdlib.h>
 #include "c_traceback.h"
 
 #define N 100
@@ -26,7 +27,7 @@ static void do_calculation(double *vec);
 int main(void)
 {
     ctb_clear_context();
-    ctb_install_signal_handlers();
+    ctb_install_signal_handler();
 
     double *vec = malloc(N * sizeof(double));
     if (!vec)
@@ -36,7 +37,7 @@ int main(void)
     }
 
     TRY_GOTO(do_calculation(vec), error);
-    printf("This shouldn't be printed if there is error");
+    printf("This shouldn't be printed if there is error\n");
 
     free(vec);
     return 0;
