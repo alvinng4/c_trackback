@@ -1,25 +1,69 @@
 # C Traceback
 A colorful, lightweight error-propagation framework for C.
 
-Website: [https://www.ctraceback.com](https://www.ctraceback.com)
+Documentation Website: [https://www.ctraceback.com](https://www.ctraceback.com)
 
-**This library is in early development. Stay tuned!**
+![C Traceback](.github/compilation_info.png)
 
 ## Features
 * Beautiful tracebacks
-* Exceptions in C
+* Works with Signal Handlers
+* Fast and Thread-safe
 * Explicit control flow
-* Thread-safe
-* Low performance overhead
-* Written in C99 with minimal dependencies
 * Works with MSVC, Clang and GCC
+* Written in C99 with minimal dependencies
 * Detailed documentations
 
-## To-dos before first release
-* Test MSVC
-* Finish docs
+## Sample usage
+```c
+#include <stdio.h>
+#include "c_traceback.h"
+
+#define N 100
+
+static void do_calculation(double *vec);
+
+int main(void)
+{
+    ctb_clear_context();
+    ctb_install_signal_handlers();
+
+    double *vec = malloc(N * sizeof(double));
+    if (!vec)
+    {
+        THROW(CTB_MEMORY_ERROR, "Failed to allocate memory");
+        goto error;
+    }
+
+    TRY_GOTO(do_calculation(vec), error);
+    printf("This shouldn't be printed if there is error");
+
+    free(vec);
+    return 0;
+
+error:
+    free(vec);
+    ctb_dump_traceback(); // Log traceback and reset context
+    return 0;
+}
+
+static void do_calculation(double *vec)
+{
+    // Initialize array
+    for (int i = 0; i < N; i++)
+    {
+        vec[i] = 0;
+    }
+
+    // Calculations
+    for (int i = 0; i < N; i++)
+    {
+        vec[i] += 10;
+    }
+}
+```
 
 ## Support Us
 * ⭐  Give us a star
-* ❤️  Sponsor
+<!-- * ❤️  Sponsor -->
 * 👤  [Follow](https://github.com/alvinng4)
