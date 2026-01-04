@@ -3,11 +3,21 @@ file(GLOB EXAMPLE_SOURCES CONFIGURE_DEPENDS "example*.c")
 foreach(SOURCE_FILE ${EXAMPLE_SOURCES})
 
     get_filename_component(TARGET_NAME ${SOURCE_FILE} NAME_WE)
+
     add_executable(${TARGET_NAME} ${SOURCE_FILE})
     target_link_libraries(${TARGET_NAME} PRIVATE c_traceback::c_traceback)
+
     if(ENABLE_SANITIZERS AND NOT MSVC)
         target_compile_options(${TARGET_NAME} PRIVATE -fsanitize=address,undefined)
         target_link_options(${TARGET_NAME} PRIVATE -fsanitize=address,undefined)
     endif()
+
+    # Test
+    add_test(
+        NAME ${TARGET_NAME}
+        COMMAND ${CMAKE_COMMAND} 
+            -DTEST_PROG=$<TARGET_FILE:${TARGET_NAME}>
+            -P ${CMAKE_CURRENT_SOURCE_DIR}/check_test.cmake
+    )
 
 endforeach()

@@ -112,6 +112,8 @@ if(PROJECT_IS_TOP_LEVEL)
 
     # --- Build Examples ---
     if(BUILD_EXAMPLES)
+        enable_testing() 
+
         if(EXISTS "${CMAKE_CURRENT_SOURCE_DIR}/examples/CMakeLists.txt")
             add_subdirectory(examples)
         endif()
