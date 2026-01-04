@@ -1,9 +1,9 @@
 # C Traceback
 A colorful, lightweight error-propagation framework for C.
 
-Website: [https://www.ctraceback.com](https://www.ctraceback.com)
+Documentation Website: [https://www.ctraceback.com](https://www.ctraceback.com)
 
-[Get Started →](https://www.ctraceback.com/docs)
+![C Traceback](.github/compilation_info.png)
 
 ## Features
 * Beautiful tracebacks
