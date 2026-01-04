@@ -45,7 +45,7 @@
 // Terminal width when it cannot be determined
 #define CTB_DEFAULT_TERMINAL_WIDTH 80
 
-// Output width when printing to file
+// Default output width when printing to file
 #define CTB_DEFAULT_FILE_WIDTH 120
 
 // Horizontal rule width
