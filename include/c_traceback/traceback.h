@@ -9,7 +9,7 @@
 #define C_TRACEBACK_TRACEBACK_H
 
 /**
- * \brief Log the current call stack to stdout.
+ * \brief Log the current call stack to stderr.
  */
 void ctb_log_call_stack(void);
 
