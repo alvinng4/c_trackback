@@ -247,7 +247,7 @@ static void print_hrule_with_header(
 void ctb_log_call_stack(void)
 {
     const CTB_Context *context = get_context();
-    FILE *const stream = stdout;
+    FILE *const stream = stderr;
     const bool use_color = should_use_color(stream);
     const Theme theme = get_theme(use_color);
 
