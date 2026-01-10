@@ -68,7 +68,9 @@ void ctb_throw_error(
         ctb_setup_error_snapshot_core(context, error_snapshot, error, file, line, func);
         if (msg != NULL)
         {
-            snprintf(error_snapshot->error_message, CTB_MAX_ERROR_MESSAGE_LENGTH, "%s", msg);
+            snprintf(
+                error_snapshot->error_message, CTB_MAX_ERROR_MESSAGE_LENGTH, "%s", msg
+            );
         }
         else
         {
