@@ -13,7 +13,7 @@ int main(void)
 {
     ctb_clear_context();
     ctb_install_signal_handler();
-    THROW(CTB_BUFFER_ERROR, "Hello! This is an error before segfault.");
+    THROW(CTB_BUFFER_ERROR, "Hello! This is a test error before segfault.");
 
     TRACE(some_function());
 

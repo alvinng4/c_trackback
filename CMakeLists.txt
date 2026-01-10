@@ -6,14 +6,14 @@ project(c_traceback
     DESCRIPTION "Colorful, lightweight tracebacks in C"
 )
 
-# --- Dependencies & Modules ---
+### Dependencies & Modules ###
 include(GNUInstallDirs)
 
-# --- Options ---
+### Options ###
 option(ENABLE_SANITIZERS "Enable address and undefined sanitizers" OFF)
 option(BUILD_EXAMPLES "Build example executables" OFF)
 
-# --- Library ---
+### Library ###
 add_library(c_traceback STATIC
     src/error.c
     src/error_codes.c
@@ -25,14 +25,14 @@ add_library(c_traceback STATIC
 )
 add_library(c_traceback::c_traceback ALIAS c_traceback)
 
-# --- Standard (c99) ---
+### Standard (c99) ###
 set_target_properties(c_traceback PROPERTIES 
     C_STANDARD 99
     C_STANDARD_REQUIRED ON
     POSITION_INDEPENDENT_CODE ON
 )
 
-# --- Includes ---
+### Includes ###
 target_include_directories(c_traceback 
     PUBLIC
         $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/include>
@@ -41,7 +41,7 @@ target_include_directories(c_traceback
         ${CMAKE_CURRENT_SOURCE_DIR}/src/internal
 )
 
-# --- Warnings ---
+### Warnings ###
 if(MSVC)
     target_compile_options(c_traceback PRIVATE /W4)
 else()
@@ -51,7 +51,7 @@ else()
     )
 endif()
 
-# --- Sanitizers ---
+### Sanitizers ###
 if(ENABLE_SANITIZERS)
     if(NOT MSVC)
         target_compile_options(c_traceback PRIVATE -fsanitize=address,undefined)
@@ -59,10 +59,10 @@ if(ENABLE_SANITIZERS)
     endif()
 endif()
 
-# --- Definitions ---
+### Definitions ###
 target_compile_definitions(c_traceback PRIVATE CTB_VERSION="${PROJECT_VERSION}")
 
-# --- Installation ---
+### Installation ###
 if(PROJECT_IS_TOP_LEVEL)
     include(CMakePackageConfigHelpers)
 
@@ -78,7 +78,7 @@ if(PROJECT_IS_TOP_LEVEL)
         DESTINATION ${CMAKE_INSTALL_INCLUDEDIR}
     )
 
-    # --- Package config & version ---
+    ### Package config & version ###
     write_basic_package_version_file(
         "${CMAKE_CURRENT_BINARY_DIR}/c_tracebackConfigVersion.cmake"
         VERSION ${PROJECT_VERSION}
@@ -97,7 +97,7 @@ if(PROJECT_IS_TOP_LEVEL)
         INSTALL_DESTINATION "${CMAKE_INSTALL_LIBDIR}/cmake/c_traceback"
     )
 
-    # --- Export targets / install cmake files ---
+    ### Export targets / install cmake files ###
     install(EXPORT c_tracebackTargets
         FILE c_tracebackTargets.cmake
         NAMESPACE c_traceback::
@@ -110,13 +110,17 @@ if(PROJECT_IS_TOP_LEVEL)
         DESTINATION ${CMAKE_INSTALL_LIBDIR}/cmake/c_traceback
     )
 
-    # --- Build Examples ---
+    ### Build Examples ###
     if(BUILD_EXAMPLES)
-        enable_testing() 
-
         if(EXISTS "${CMAKE_CURRENT_SOURCE_DIR}/examples/CMakeLists.txt")
             add_subdirectory(examples)
         endif()
     endif()
 
+endif()
+
+### Testing ###
+if(EXISTS "${CMAKE_CURRENT_SOURCE_DIR}/tests/CMakeLists.txt")
+    enable_testing() 
+    add_subdirectory(tests)
 endif()

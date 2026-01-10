@@ -4,32 +4,6 @@
 #define FILE_PATH1 "../test1.txt"
 #define FILE_PATH2 "../test2.txt"
 
-void open_file(const char *file_name);
-void do_something_risky();
-
-int main(void)
-{
-    ctb_clear_context();
-    ctb_install_signal_handler();
-
-    TRACE(open_file(FILE_PATH1));
-    TRACE(open_file(FILE_PATH2));
-
-    // Throw 100 errors for testing
-    for (int i = 0; i < 100; ++i)
-    {
-        TRACE(do_something_risky());
-    }
-
-    TRY_GOTO(do_something_risky(), error);
-    /* Do something */
-    return 0;
-
-error:
-    ctb_dump_traceback();
-    return 1;
-}
-
 void open_file(const char *file_name)
 {
     FILE *file = fopen(file_name, "r");
@@ -52,4 +26,27 @@ void do_something_risky()
     }
     int y = 10 / x;
     (void)y;
+}
+
+int main(void)
+{
+    ctb_clear_context();
+    ctb_install_signal_handler();
+
+    TRACE(open_file(FILE_PATH1));
+    TRACE(open_file(FILE_PATH2));
+
+    // Throw 100 errors for testing
+    for (int i = 0; i < 100; ++i)
+    {
+        TRACE(do_something_risky());
+    }
+
+    TRY_GOTO(do_something_risky(), error);
+    /* Do something */
+    return 0;
+
+error:
+    ctb_dump_traceback();
+    return 1;
 }

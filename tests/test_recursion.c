@@ -4,23 +4,6 @@
 
 #define N 100
 
-void recursion(int count);
-
-int main(void)
-{
-    ctb_clear_context();
-    ctb_install_signal_handler();
-
-    TRY_GOTO(recursion(0), error);
-    printf("This shouldn't be printed if there is error");
-
-    return 0;
-
-error:
-    ctb_dump_traceback(); // Log traceback and reset error stack
-    return 1;
-}
-
 void recursion(int count)
 {
     if (count >= N)
@@ -30,4 +13,17 @@ void recursion(int count)
     }
 
     TRACE(recursion(count + 1));
+}
+
+int main(void)
+{
+    ctb_clear_context();
+    ctb_install_signal_handler();
+
+    TRY_GOTO(recursion(0), error);
+    printf("This shouldn't be printed if there is error");
+
+error:
+    ctb_dump_traceback(); // Log traceback and reset error stack
+    return 0;
 }
