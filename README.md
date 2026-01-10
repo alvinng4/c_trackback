@@ -7,7 +7,7 @@ Documentation Website: [https://www.ctraceback.com](https://www.ctraceback.com)
 
 ## Features
 * Beautiful tracebacks
-* Works with Signal Handlers
+* Support for Signal Handlers
 * Fast and Thread-safe
 * Explicit control flow
 * Works with MSVC, Clang and GCC
@@ -45,7 +45,7 @@ int main(void)
 error:
     free(vec);
     ctb_dump_traceback(); // Log traceback and reset context
-    return 0;
+    return 1;
 }
 
 static void do_calculation(double *vec)
